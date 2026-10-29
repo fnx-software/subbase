@@ -77,8 +77,7 @@ final class SubscriptionAdministrationTest extends TestCase
             ]);
         }
 
-        Gate::define('manageSubscription', fn (User $actor, Model $billable): bool =>
-            $actor->name === 'owner' && $billable->getKey() === 1);
+        Gate::define('manageSubscription', fn (User $actor, Model $billable): bool => $actor->name === 'owner' && $billable->getKey() === 1);
     }
 
     public function test_authorized_owner_can_cancel_at_end_without_affecting_other_tenant(): void

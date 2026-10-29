@@ -9,9 +9,9 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use InvalidArgumentException;
 use Laravelcm\Subscriptions\Models\Subscription;
 use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
-use InvalidArgumentException;
 
 /**
  * Tenant-safe cancellation of a named subscription.
@@ -27,18 +27,18 @@ final class SubscriptionAdministration
         string $subscriptionName,
         bool $immediately = false,
     ): Subscription {
-        if (!$billable->exists || !method_exists($billable, 'planSubscriptions')) {
+        if (! $billable->exists || ! method_exists($billable, 'planSubscriptions')) {
             throw new InvalidArgumentException('Subscription owner must be a saved, subscribable model.');
         }
 
-        if (!preg_match('/^[A-Za-z0-9_-]{1,100}$/D', $subscriptionName)) {
+        if (! preg_match('/^[A-Za-z0-9_-]{1,100}$/D', $subscriptionName)) {
             throw new InvalidArgumentException('Subscription name is invalid.');
         }
 
         $ability = (string) config('subbase.permissions.manage_subscription', 'manageSubscription');
 
-        if (!SubbaseTenancy::allows($billable, 'cancel', $actor)
-            || !Gate::forUser($actor)->allows($ability, $billable)
+        if (! SubbaseTenancy::allows($billable, 'cancel', $actor)
+            || ! Gate::forUser($actor)->allows($ability, $billable)
         ) {
             throw new AuthorizationException('You cannot manage this subscription.');
         }
@@ -52,7 +52,7 @@ final class SubscriptionAdministration
 
             // Do not inadvertently extend a period or create new charges.
             // Repeated cancellation is idempotent for the same mode.
-            if (!$subscription->canceled() || ($immediately && !$subscription->ended())) {
+            if (! $subscription->canceled() || ($immediately && ! $subscription->ended())) {
                 $subscription->cancel($immediately);
             }
 
