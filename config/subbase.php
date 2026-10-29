@@ -30,6 +30,22 @@ return [
     // If enabled without a resolver, every tenant query and action is denied.
     'tenancy' => ['enabled' => false, 'access' => null],
 
+    // License keys belong to a catalog SKU and a subscription Plan, not to Fenix.
+    // This allows one billing engine to sell CRM, POS, Clinic or independent apps.
+    'licensing' => [
+        'key_prefix' => env('SUBBASE_LICENSE_PREFIX', 'LIC'),
+        'max_order_quantity' => 500,
+        'reseller_max_retail_price' => true,
+        'tables' => [
+            'products' => 'subbase_license_products',
+            'offers' => 'subbase_license_offers',
+            'providers' => 'subbase_license_providers',
+            'orders' => 'subbase_license_orders',
+            'keys' => 'subbase_license_keys',
+            'sales' => 'subbase_license_sales',
+        ],
+    ],
+
     'theme' => env('SUBBASE_THEME', 'default'),
 
     'locale_currency_map' => [

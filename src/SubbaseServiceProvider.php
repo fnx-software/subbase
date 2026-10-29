@@ -49,6 +49,8 @@ class SubbaseServiceProvider extends PackageServiceProvider
                             'add_featured_to_plans_table.php',
                             'create_discounts_table.php',
                             'upgrade_billing_decimal_columns.php',
+                            'create_license_catalog_and_providers_table.php',
+                            'create_license_orders_and_keys_table.php',
                         ];
 
                         foreach ($migrations as $migration) {
