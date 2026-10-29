@@ -11,6 +11,7 @@ use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Services\LicenseFulfillmentService;
 use Nafiswatsiq\Subbase\Services\LicenseInventoryService;
 use Nafiswatsiq\Subbase\Services\LicenseOrderService;
+use Nafiswatsiq\Subbase\Services\LicenseProviderDashboard;
 use Nafiswatsiq\Subbase\Services\LicenseProviderService;
 use Nafiswatsiq\Subbase\Services\LicenseResaleService;
 use RuntimeException;
@@ -48,6 +49,29 @@ final class LicenseWholesaleTest extends LicenseTestCase
 
         app(LicenseFulfillmentService::class)->fulfillPaidOrder($order, 9876);
         $this->assertSame(12, $order->keys()->count());
+    }
+
+    public function test_dashboard_tracks_wholesale_spend_and_declared_reseller_margin_by_currency(): void
+    {
+        $provider = $this->reseller();
+        $merchant = $this->actor('merchant');
+        \Illuminate\Support\Facades\Gate::define('viewLicenseProviderDashboard', static fn ($actor, $subject): bool => $actor->name === 'merchant' && $subject->getKey() === $provider->getKey());
+
+        $order = app(LicenseOrderService::class)->place(
+            $this->offer(), $this->organization(1), $merchant, 12, $provider,
+        );
+        app(LicenseFulfillmentService::class)->fulfillPaidOrder($order, 884);
+
+        foreach ($order->keys()->limit(2)->get() as $key) {
+            app(LicenseResaleService::class)->record($key, $provider, $merchant, '140.00');
+        }
+
+        $summary = app(LicenseProviderDashboard::class)->summary($provider, $merchant);
+        $this->assertSame(12, $summary['keys']['available']);
+        $this->assertSame(2, $summary['keys']['sales_recorded']);
+        $this->assertSame('1200.0000', $summary['currencies']['USD']['purchases']);
+        $this->assertSame('280.0000', $summary['currencies']['USD']['sales']);
+        $this->assertSame('80.0000', $summary['currencies']['USD']['gross_margin']);
     }
 
     public function test_pending_orders_cannot_export_license_keys(): void
