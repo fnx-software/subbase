@@ -51,3 +51,7 @@
 ## No API / migration claims yet
 
 Version 2 is not released. No installed app is migrated by this branch. Run `composer test`, Composer audit, package migrations and a real application integration suite before merging.
+
+### Legacy styling gate
+
+The upstream fork currently has 64 pre-existing Pint style violations across 152 PHP files. This feature branch lints only new helper + tests; a separate formatting-only PR will make full-repo `pint --test` mandatory before the first Fenix major release. Formatting has no semantic intent.
