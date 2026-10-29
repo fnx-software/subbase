@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts;
 
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -27,7 +28,7 @@ class LicenseProductResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCube;
 
-    protected static ?string $navigationGroup = 'Licensing';
+    protected static string|UnitEnum|null $navigationGroup = 'Licensing';
 
     protected static ?string $recordTitleAttribute = 'name';
 
