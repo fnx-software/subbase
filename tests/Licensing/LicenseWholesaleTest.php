@@ -75,6 +75,31 @@ final class LicenseWholesaleTest extends LicenseTestCase
         $this->assertSame('80.0000', $summary['currencies']['USD']['gross_margin']);
     }
 
+    public function test_enabled_tenant_mode_without_resolver_blocks_reseller_purchases(): void
+    {
+        $provider = $this->reseller();
+        config(['subbase.tenancy.enabled' => true, 'subbase.tenancy.access' => null]);
+
+        $this->expectException(AuthorizationException::class);
+        app(LicenseOrderService::class)->place(
+            $this->offer(), $this->organization(1), $this->actor('merchant'), 12, $provider,
+        );
+    }
+
+    public function test_enabled_tenant_mode_without_resolver_blocks_key_inventory_export(): void
+    {
+        $provider = $this->reseller();
+        $order = app(LicenseOrderService::class)->place(
+            $this->offer(), $this->organization(1), $this->actor('merchant'), 12, $provider,
+        );
+        app(LicenseFulfillmentService::class)->fulfillPaidOrder($order, 705);
+
+        config(['subbase.tenancy.enabled' => true, 'subbase.tenancy.access' => null]);
+
+        $this->expectException(AuthorizationException::class);
+        app(LicenseInventoryService::class)->reveal($order, $this->actor('merchant'));
+    }
+
     public function test_pending_orders_cannot_export_license_keys(): void
     {
         $order = app(LicenseOrderService::class)->place(
