@@ -44,6 +44,9 @@ final class SubbasePermissionTest extends TestCase
     {
         Gate::define('ViewAny:Plan', fn (User $user): bool => $user->name === 'allowed');
 
-        $this->assertFalse(SubbasePermission::allows(null, 'viewAny', Plan::class, new User(['name' => 'other'])));
+        $user = new User();
+        $user->name = 'other';
+
+        $this->assertFalse(SubbasePermission::allows(null, 'viewAny', Plan::class, $user));
     }
 }
