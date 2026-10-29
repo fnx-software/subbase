@@ -19,13 +19,13 @@ final class SubbaseTenancy
 
     public static function scope(Builder $query): Builder
     {
-        if (!self::enabled()) {
+        if (! self::enabled()) {
             return $query;
         }
 
         $actor = Auth::user();
         $resolver = self::resolver();
-        if (!$actor instanceof Authenticatable || !$resolver) {
+        if (! $actor instanceof Authenticatable || ! $resolver) {
             return $query->whereRaw('1 = 0');
         }
 
@@ -34,7 +34,7 @@ final class SubbaseTenancy
 
     public static function allows(?Model $record, string $ability, Authenticatable $actor): bool
     {
-        if (!self::enabled()) {
+        if (! self::enabled()) {
             return true;
         }
 
@@ -46,7 +46,7 @@ final class SubbaseTenancy
     private static function resolver(): ?TenantAccess
     {
         $class = config('subbase.tenancy.access');
-        if (!is_string($class) || !is_a($class, TenantAccess::class, true)) {
+        if (! is_string($class) || ! is_a($class, TenantAccess::class, true)) {
             return null;
         }
 
