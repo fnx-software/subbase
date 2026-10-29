@@ -23,3 +23,9 @@ Existing apps that relied on permissive missing-Spatie access will be denied unt
 - Added `docs/INSTALLATION.md` for safe path-repo sandbox integration.
 
 **Not yet released.** Multi-tenant end-to-end coverage, recurring billing, version tags, CRM/Zeno migration, and complete formatting/DB matrix are outstanding.
+
+### Subscription administration
+
+- Added `SubscriptionAdministration::cancel($billable, $actor, $subscriptionName, $immediately)` to cancel a named subscription after Laravel Gate and tenant-policy validation, with DB transaction/lock and cross-organization isolation tests.
+- Latest CI tested **23 PHPUnit tests / 44 assertions** and scoped Pint + Composer audit ([run 40839099089](https://github.com/fnx-software/subbase/actions/runs/40839099089)).
+- Cancellation does not trigger a refund; payment provider refund workflows remain separate and unimplemented.

@@ -15,8 +15,9 @@ Subbase and its companion Subbase Payment are the **one owned subscription stack
 - [x] Accurate `Plan::getPriceDecimalForCurrency()` / `PlanPriceHelper::resolveExactWithDiscounts()` for checkout alongside legacy display APIs.
 - [x] Canonical decimal string price storage, `decimal:4` model casts, and forward-only widening migration for plan/discount/pivot fields. Avoid destructive down migrations.
 - [x] Tested price migration and applied discounts in Laravel/Testbench, initially using SQLite.
+- [x] `SubscriptionAdministration::cancel()` implements tenant- and Gate-authorized immediate/end-of-period cancellation with row locking and isolation tests. Cancellation does **not** refund money automatically.
 - [x] PHP 8.4/Filament 5/Laravel 13 compatible CI running Composer validate/update, PHPUnit, scoped Pint and Composer audit.
-- [x] [Last known green code run](https://github.com/fnx-software/subbase/actions/runs/40838411564): **19 tests / 38 assertions**; Composer rename itself requires latest CI confirmation.
+- [x] [Last known green code run](https://github.com/fnx-software/subbase/actions/runs/40839099089): **23 tests / 44 assertions**; Composer rename itself requires latest CI confirmation.
 - [x] Product architecture, developer usage, staged upgrade and implementation backlog documented.
 
 ## Remaining before stable release

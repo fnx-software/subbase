@@ -78,3 +78,21 @@ vendor/bin/pint --test
 These commands are intended for the package checkout. Full Pint may report **pre-existing upstream violations** outside the new code. The feature-branch CI gates added files but a full-formatting PR is needed for stable release.
 
 Do not replace `nafiswatsiq/subbase` in CRM or Zeno with this feature branch until audited migration and fixture tests pass.
+
+## 7. Authorized subscription cancellation (new)
+
+`Nafiswatsiq\Subbase\Services\SubscriptionAdministration` provides a DB-transactional cancellation operation that is denied unless the authenticated actor is authorized by Laravel Gate *and*, if enabled, by the tenant access resolver:
+
+```php
+use Nafiswatsiq\Subbase\Services\SubscriptionAdministration;
+
+// Define Gate/policy 'manageSubscription' for the billable Organization.
+app(SubscriptionAdministration::class)->cancel(
+    billable: $organization,
+    actor: $request->user(),
+    subscriptionName: 'default',
+    immediately: false, // default: cancel at end of paid period
+);
+```
+
+By design, this does **not** initiate a gateway refund or modify historical payment records. Use Subbase Payment's eventual verified refund workflow for that separately. Do not bypass the Gate in host controllers or jobs.
