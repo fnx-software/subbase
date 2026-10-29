@@ -29,3 +29,13 @@ Existing apps that relied on permissive missing-Spatie access will be denied unt
 - Added `SubscriptionAdministration::cancel($billable, $actor, $subscriptionName, $immediately)` to cancel a named subscription after Laravel Gate and tenant-policy validation, with DB transaction/lock and cross-organization isolation tests.
 - Latest CI tested **23 PHPUnit tests / 44 assertions** and scoped Pint + Composer audit ([run 40839099089](https://github.com/fnx-software/subbase/actions/runs/40839099089)).
 - Cancellation does not trigger a refund; payment provider refund workflows remain separate and unimplemented.
+
+## 2026-10-29 — Wholesale license keys and provider reseller program
+
+- Added app-SKU-based license catalog with retail/wholesale pricing, MOQ and immutable plan/SKU/term snapshots per order.
+- Added Provider application, review/approval/suspension, server-priced orders, single-use encrypted random keys, redemption and subscription activation.
+- Added independently declared reseller sales, per-currency gross margin dashboard, restricted key export and optional host tenant checks.
+- Registered Filament 5 resources for catalog, offers, provider decisions, paid orders and masked inventory.
+- Added 12-key CRM reseller, annual redemption, duplicate token, price change and tenant isolation test coverage.
+- Payment gateway verification and protected routes are part of the coordinated `fnx-software/subbase-payment` PR #2.
+- **No live merchant settlement certification; feature remains Draft.**

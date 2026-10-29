@@ -96,3 +96,10 @@ app(SubscriptionAdministration::class)->cancel(
 ```
 
 By design, this does **not** initiate a gateway refund or modify historical payment records. Use Subbase Payment's eventual verified refund workflow for that separately. Do not bypass the Gate in host controllers or jobs.
+
+
+## 8. Optional licensed-app reseller channel
+
+After installing the Subbase package, run its additive `subbase:upgrade --migrations` to publish the new licensing migrations, **inspect timestamps and run only on a backed-up staging database**. The authenticated retail/wholesale/purchase/activation endpoints are provided by the companion `fnx-software/subbase-payment` package. Provide the required platform-level Gates and company/user billable resolver in your application (Fenix Accounts/ZITADEL is an optional host integration).
+
+See [License Key & Provider specification](LICENSING-RESELLERS.md) for commerce rules, 12-key CRM example, Filament resources, safe API, required permissions and release blockers.
