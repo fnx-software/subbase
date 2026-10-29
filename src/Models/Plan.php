@@ -67,6 +67,32 @@ class Plan extends BasePlan
         return (float) ($this->price ?? 0.0);
     }
 
+    /**
+     * Exact financial accessor: no binary float conversion. Existing float API
+     * remains for legacy presentation calls, not financial posting.
+     */
+    public function getPriceDecimalForCurrency(?string $currency = null, bool $fallbackToBase = true): string
+    {
+        $target = strtoupper((string) ($currency ?: $this->currency));
+        $raw = $this->getRawOriginal('prices');
+        $prices = is_string($raw) ? json_decode($raw, true) : $raw;
+        if (! is_array($prices)) {
+            $prices = [];
+        }
+
+        if (array_key_exists($target, $prices) && is_numeric($prices[$target])) {
+            return (new \Nafiswatsiq\Subbase\Support\Money((string) $prices[$target], $target))->amount();
+        }
+
+        if (! $fallbackToBase) {
+            return \Nafiswatsiq\Subbase\Support\Money::zero($target)->amount();
+        }
+
+        $base = $this->getRawOriginal('price') ?? '0';
+
+        return (new \Nafiswatsiq\Subbase\Support\Money((string) $base, $target))->amount();
+    }
+
     public function getPriceForLocale(?string $locale = null, bool $fallbackToBase = true): float
     {
         return $this->getPriceForCurrency(static::currencyFromLocale($locale), $fallbackToBase);
