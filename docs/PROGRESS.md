@@ -54,3 +54,8 @@ Read `AGENTS.md`, `docs/PRODUCT-SPEC.md`, `docs/INSTALLATION.md`, `docs/PROGRESS
 - [ ] Gateway sandbox E2E tests, PostgreSQL/MySQL migrations, multi-instance race tests and full legacy Pint baseline.
 
 For the exact contract, API, release gates and migration order read `docs/LICENSING-RESELLERS.md`. No merge or production release yet.
+
+### Latest validated licensing checkpoint
+
+- [x] 42 PHPUnit tests / 108 assertions passed with Composer validate/update, targeted Pint and Composer audit at [GitHub Actions run 40842273565](https://github.com/fnx-software/subbase/actions/runs/40842273565). This is test-environment verification, **not** provider sandbox or production payment certification.
+- [x] Changes and rollout blockers remain tracked in the [Draft PR #2](https://github.com/fnx-software/subbase/pull/2) and the licensing documentation.
