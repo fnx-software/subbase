@@ -35,8 +35,8 @@ class Discount extends Model
     ];
 
     protected $casts = [
-        'value' => 'float',
-        'min_amount' => 'float',
+        'value' => 'decimal:4',
+        'min_amount' => 'decimal:4',
         'starts_at' => 'datetime',
         'expires_at' => 'datetime',
         'is_active' => 'boolean',
