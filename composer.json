@@ -1,6 +1,6 @@
 {
-    "name": "nafiswatsiq/subbase",
-    "description": "Filament plugin for advanced subscriptions",
+    "name": "fnx-software/subbase",
+    "description": "FNX Software universal subscription management for Laravel and Filament",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -11,7 +11,7 @@
         "billing",
         "multi-currency"
     ],
-    "homepage": "https://github.com/nafiswatsiq/subbase",
+    "homepage": "https://github.com/fnx-software/subbase",
     "authors": [
         {
             "name": "Nafis Watsiq",
@@ -50,5 +50,9 @@
     "scripts": {
         "test": "phpunit",
         "lint": "pint --test"
+    },
+    "support": {
+        "source": "https://github.com/fnx-software/subbase",
+        "issues": "https://github.com/fnx-software/subbase/pulls"
     }
 }
