@@ -20,7 +20,7 @@ class SubscriptionPolicy
 
     public function view(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', Subscription::class, $authUser, $subscription);
     }
 
     public function create(AuthUser $authUser): bool
@@ -30,12 +30,12 @@ class SubscriptionPolicy
 
     public function update(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', Subscription::class, $authUser, $subscription);
     }
 
     public function delete(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', Subscription::class, $authUser, $subscription);
     }
 
     public function deleteAny(AuthUser $authUser): bool
@@ -45,12 +45,12 @@ class SubscriptionPolicy
 
     public function restore(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', Subscription::class, $authUser, $subscription);
     }
 
     public function forceDelete(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', Subscription::class, $authUser, $subscription);
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
@@ -65,7 +65,7 @@ class SubscriptionPolicy
 
     public function replicate(AuthUser $authUser, Subscription $subscription): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'replicate', Subscription::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'replicate', Subscription::class, $authUser, $subscription);
     }
 
     public function reorder(AuthUser $authUser): bool

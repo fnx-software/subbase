@@ -20,7 +20,7 @@ class PlanPolicy
 
     public function view(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'view', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'view', Plan::class, $authUser, $plan);
     }
 
     public function create(AuthUser $authUser): bool
@@ -30,12 +30,12 @@ class PlanPolicy
 
     public function update(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'update', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'update', Plan::class, $authUser, $plan);
     }
 
     public function delete(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'delete', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'delete', Plan::class, $authUser, $plan);
     }
 
     public function deleteAny(AuthUser $authUser): bool
@@ -45,12 +45,12 @@ class PlanPolicy
 
     public function restore(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'restore', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'restore', Plan::class, $authUser, $plan);
     }
 
     public function forceDelete(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'forceDelete', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'forceDelete', Plan::class, $authUser, $plan);
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
@@ -65,7 +65,7 @@ class PlanPolicy
 
     public function replicate(AuthUser $authUser, Plan $plan): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'replicate', Plan::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'replicate', Plan::class, $authUser, $plan);
     }
 
     public function reorder(AuthUser $authUser): bool

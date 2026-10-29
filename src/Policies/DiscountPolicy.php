@@ -20,7 +20,7 @@ class DiscountPolicy
 
     public function view(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'view', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'view', Discount::class, $authUser, $discount);
     }
 
     public function create(AuthUser $authUser): bool
@@ -30,12 +30,12 @@ class DiscountPolicy
 
     public function update(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'update', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'update', Discount::class, $authUser, $discount);
     }
 
     public function delete(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'delete', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'delete', Discount::class, $authUser, $discount);
     }
 
     public function deleteAny(AuthUser $authUser): bool
@@ -45,12 +45,12 @@ class DiscountPolicy
 
     public function restore(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'restore', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'restore', Discount::class, $authUser, $discount);
     }
 
     public function forceDelete(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'forceDelete', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'forceDelete', Discount::class, $authUser, $discount);
     }
 
     public function forceDeleteAny(AuthUser $authUser): bool
@@ -65,7 +65,7 @@ class DiscountPolicy
 
     public function replicate(AuthUser $authUser, Discount $discount): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'replicate', Discount::class, $authUser);
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'replicate', Discount::class, $authUser, $discount);
     }
 
     public function reorder(AuthUser $authUser): bool

@@ -11,6 +11,7 @@ use Nafiswatsiq\Subbase\Filament\Resources\Subscriptions\Schemas\SubscriptionFor
 use Nafiswatsiq\Subbase\Filament\Resources\Subscriptions\Tables\SubscriptionsTable;
 use Nafiswatsiq\Subbase\Models\Subscription;
 use Nafiswatsiq\Subbase\Support\SubbasePermission;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -45,12 +46,12 @@ class SubscriptionResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', static::getModel()), null, $record);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', static::getModel()), null, $record);
     }
 
     public static function canDeleteAny(): bool
@@ -60,7 +61,7 @@ class SubscriptionResource extends Resource
 
     public static function canForceDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', static::getModel()), null, $record);
     }
 
     public static function canForceDeleteAny(): bool
@@ -70,7 +71,7 @@ class SubscriptionResource extends Resource
 
     public static function canRestore(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', static::getModel()), null, $record);
     }
 
     public static function canRestoreAny(): bool
@@ -80,7 +81,7 @@ class SubscriptionResource extends Resource
 
     public static function canView(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', static::getModel()), null, $record);
     }
 
     public static function getNavigationLabel(): string
@@ -119,11 +120,17 @@ class SubscriptionResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return SubbaseTenancy::scope(parent::getEloquentQuery());
+    }
+
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
+        return SubbaseTenancy::scope(
+            parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ]),
+        );
     }
 }
