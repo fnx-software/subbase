@@ -54,6 +54,28 @@ final class LicenseRedemptionTest extends LicenseTestCase
         $this->assertSame($firstEnd->addYearNoOverflow()->toDateString(), $second->ends_at->toDateString());
     }
 
+    public function test_catalog_edits_after_sale_cannot_change_purchased_license_duration_or_product(): void
+    {
+        $provider = $this->reseller();
+        $offer = $this->offer();
+        $order = app(LicenseOrderService::class)->place(
+            $offer, $this->organization(1), $this->actor('merchant'), 12, $provider,
+        );
+        app(LicenseFulfillmentService::class)->fulfillPaidOrder($order, 130);
+        $key = app(LicenseInventoryService::class)->reveal($order, $this->actor('merchant'))[0];
+
+        $offer->update(['term_count' => 3]);
+        $offer->product->update(['sku' => 'renamed-crm']);
+
+        app(LicenseRedemptionService::class)->redeem($key, $this->organization(2), $this->actor('customer'));
+
+        $subscription = $this->organization(2)->planSubscriptions()->firstOrFail();
+        $this->assertSame('license-crm', $subscription->slug);
+        $this->assertSame(now()->addYearNoOverflow()->toDateString(), $subscription->ends_at->toDateString());
+        $this->assertSame('crm', $order->contract_product_sku);
+        $this->assertSame(1, $order->contract_term_count);
+    }
+
     public function test_invalid_key_never_creates_subscription(): void
     {
         $this->expectException(InvalidArgumentException::class);
