@@ -47,12 +47,12 @@ class PlanResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'update', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'update', static::getModel(), null, $record);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'delete', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'delete', static::getModel(), null, $record);
     }
 
     public static function canDeleteAny(): bool
@@ -62,7 +62,7 @@ class PlanResource extends Resource
 
     public static function canForceDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'forceDelete', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'forceDelete', static::getModel(), null, $record);
     }
 
     public static function canForceDeleteAny(): bool
@@ -72,7 +72,7 @@ class PlanResource extends Resource
 
     public static function canRestore(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'restore', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'restore', static::getModel(), null, $record);
     }
 
     public static function canRestoreAny(): bool
@@ -82,12 +82,12 @@ class PlanResource extends Resource
 
     public static function canReplicate(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'replicate', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'replicate', static::getModel(), null, $record);
     }
 
     public static function canView(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.plan'), 'view', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.plan'), 'view', static::getModel(), null, $record);
     }
 
     public static function getNavigationLabel(): string

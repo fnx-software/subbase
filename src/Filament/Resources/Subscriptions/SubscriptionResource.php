@@ -46,12 +46,12 @@ class SubscriptionResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'update', static::getModel(), null, $record);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'delete', static::getModel(), null, $record);
     }
 
     public static function canDeleteAny(): bool
@@ -61,7 +61,7 @@ class SubscriptionResource extends Resource
 
     public static function canForceDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'forceDelete', static::getModel(), null, $record);
     }
 
     public static function canForceDeleteAny(): bool
@@ -71,7 +71,7 @@ class SubscriptionResource extends Resource
 
     public static function canRestore(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'restore', static::getModel(), null, $record);
     }
 
     public static function canRestoreAny(): bool
@@ -81,7 +81,7 @@ class SubscriptionResource extends Resource
 
     public static function canView(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', static::getModel()), null, $record);
+        return SubbasePermission::allows(config('subbase.permissions.subscription'), 'view', static::getModel(), null, $record);
     }
 
     public static function getNavigationLabel(): string
