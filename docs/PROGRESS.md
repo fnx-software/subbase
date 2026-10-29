@@ -9,7 +9,7 @@ Date: 2026-10-29. Product target: one standalone billing package across all Lara
 - [x] Implemented a fail-closed native Laravel Gate authorization helper with optional Spatie integration.
 - [x] Policy methods use the provided actor and accept generic `Authenticatable` contracts.
 - [x] PHPUnit/Testbench tests added for permission denial and explicit grant; PHP 8.4 Laravel 13 tests observed passing (5/5).
-- [x] Composer audit and scoped new-file formatting checked in the feature branch's CI run; this is **not** a full-repo audit of business behavior.
+- [x] [Green CI](https://github.com/fnx-software/subbase/actions/runs/40828540923): 5 PHPUnit tests / 5 assertions; Composer audit and scoped new-file Pint succeeded. This is **not** a full business-behavior or legacy-formatting audit.
 - [x] Documented independent Eloquent subscription owners and the no-Fenix-dependency decision.
 - [ ] Complete reusable tenant-aware resource scoping and signed API adapters.
 - [ ] Verified installation + upgrade in CRM and Zeno; do not change their installed packages yet.
@@ -30,3 +30,7 @@ Date: 2026-10-29. Product target: one standalone billing package across all Lara
 ## Continue next
 
 Read `AGENTS.md`, `docs/PRODUCT-SPEC.md`, `docs/UNIVERSAL-BILLING.md`, `docs/SECURITY-MIGRATION.md` and this document. Add tests for each feature, link issues/PRs and update Changelog and this file with actual verification. Keep `main` unchanged until reviewed.
+
+## Review
+
+- [Draft pull request #2](https://github.com/fnx-software/subbase/pull/2) — branch remains separate from `main` pending consumer integration, full financial verification and release preparation.
