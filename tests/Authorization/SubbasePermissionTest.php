@@ -14,7 +14,7 @@ final class SubbasePermissionTest extends TestCase
 {
     public function test_authenticated_user_without_any_permission_is_denied(): void
     {
-        $actor = new User();
+        $actor = new User;
 
         $this->assertFalse(SubbasePermission::allows(null, 'viewAny', Plan::class, $actor));
     }
@@ -23,7 +23,7 @@ final class SubbasePermissionTest extends TestCase
     {
         Gate::define('ViewAny:Plan', fn (User $user): bool => true);
 
-        $this->assertTrue(SubbasePermission::allows(null, 'viewAny', Plan::class, new User()));
+        $this->assertTrue(SubbasePermission::allows(null, 'viewAny', Plan::class, new User));
     }
 
     public function test_a_configured_permission_is_used_without_requiring_spatie(): void
@@ -31,20 +31,20 @@ final class SubbasePermissionTest extends TestCase
         Gate::define('manage billing plans', fn (User $user): bool => true);
 
         $this->assertTrue(
-            SubbasePermission::allows('manage billing plans', 'viewAny', Plan::class, new User()),
+            SubbasePermission::allows('manage billing plans', 'viewAny', Plan::class, new User),
         );
     }
 
     public function test_no_context_is_never_implicitly_authorized(): void
     {
-        $this->assertFalse(SubbasePermission::allows(null, actor: new User()));
+        $this->assertFalse(SubbasePermission::allows(null, actor: new User));
     }
 
     public function test_different_actor_is_not_implicitly_authorized(): void
     {
         Gate::define('ViewAny:Plan', fn (User $user): bool => $user->name === 'allowed');
 
-        $user = new User();
+        $user = new User;
         $user->name = 'other';
 
         $this->assertFalse(SubbasePermission::allows(null, 'viewAny', Plan::class, $user));
