@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Support;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -22,6 +23,7 @@ final class SubbasePermission
         ?string $ability = null,
         ?string $subject = null,
         ?Authenticatable $actor = null,
+        ?Model $record = null,
     ): bool {
         $actor ??= Auth::user();
 
@@ -39,6 +41,7 @@ final class SubbasePermission
             $permission = Str::studly($ability).':'.class_basename($subject);
         }
 
-        return Gate::forUser($actor)->allows($permission);
+        return SubbaseTenancy::allows($record, (string) $ability, $actor)
+            && Gate::forUser($actor)->allows($permission);
     }
 }

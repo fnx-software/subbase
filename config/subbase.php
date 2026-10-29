@@ -26,6 +26,10 @@ return [
     // Monetary posting requires canonical decimal strings, not PHP floats.
     'currency_scales' => [],
 
+    // Opt-in: host application defines record- and query-level isolation.
+    // If enabled without a resolver, every tenant query and action is denied.
+    'tenancy' => ['enabled' => false, 'access' => null],
+
     'theme' => env('SUBBASE_THEME', 'default'),
 
     'locale_currency_map' => [
