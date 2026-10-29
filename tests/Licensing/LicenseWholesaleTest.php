@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Tests\Licensing;
 
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
@@ -55,7 +56,7 @@ final class LicenseWholesaleTest extends LicenseTestCase
     {
         $provider = $this->reseller();
         $merchant = $this->actor('merchant');
-        \Illuminate\Support\Facades\Gate::define('viewLicenseProviderDashboard', static fn ($actor, $subject): bool => $actor->name === 'merchant' && $subject->getKey() === $provider->getKey());
+        Gate::define('viewLicenseProviderDashboard', static fn ($actor, $subject): bool => $actor->name === 'merchant' && $subject->getKey() === $provider->getKey());
 
         $order = app(LicenseOrderService::class)->place(
             $this->offer(), $this->organization(1), $merchant, 12, $provider,
