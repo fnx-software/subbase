@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Models\LicenseKey;
-use Nafiswatsiq\Subbase\Models\LicenseOffer;
-use Nafiswatsiq\Subbase\Models\LicenseProduct;
 use Nafiswatsiq\Subbase\Models\Plan;
 use RuntimeException;
 

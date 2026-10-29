@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Tests\Licensing;
 
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Services\LicenseFulfillmentService;
 use Nafiswatsiq\Subbase\Services\LicenseInventoryService;
 use Nafiswatsiq\Subbase\Services\LicenseOrderService;
+use Nafiswatsiq\Subbase\Services\LicenseProviderService;
 use Nafiswatsiq\Subbase\Services\LicenseResaleService;
 use RuntimeException;
 
@@ -62,7 +62,7 @@ final class LicenseWholesaleTest extends LicenseTestCase
 
     public function test_unapproved_reseller_cannot_purchase(): void
     {
-        $provider = app(\Nafiswatsiq\Subbase\Services\LicenseProviderService::class)->apply(
+        $provider = app(LicenseProviderService::class)->apply(
             $this->organization(1), $this->actor('merchant'), 'Pending shop',
         );
 

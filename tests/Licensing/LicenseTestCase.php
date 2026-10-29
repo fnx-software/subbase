@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Laravelcm\Subscriptions\Traits\HasPlanSubscriptions;
 use Nafiswatsiq\Subbase\Models\LicenseOffer;
+use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Models\LicenseProduct;
 use Nafiswatsiq\Subbase\Models\LicenseProvider;
 use Nafiswatsiq\Subbase\Models\Plan;
 use Nafiswatsiq\Subbase\Models\Subscription;
+use Nafiswatsiq\Subbase\Services\LicenseProviderService;
 use Nafiswatsiq\Subbase\Tests\TestCase;
 
 final class LicenseTestOrganization extends Model
@@ -109,19 +111,13 @@ abstract class LicenseTestCase extends TestCase
             'updated_at' => now(),
         ]);
 
-        Gate::define('applyForLicenseProvider', static fn (User $actor, Model $owner): bool =>
-            $actor->name === 'merchant' && (int) $owner->getKey() === 1);
+        Gate::define('applyForLicenseProvider', static fn (User $actor, Model $owner): bool => $actor->name === 'merchant' && (int) $owner->getKey() === 1);
         Gate::define('manageLicenseProviders', static fn (User $actor): bool => $actor->name === 'admin');
-        Gate::define('purchaseWholesaleLicenses', static fn (User $actor, LicenseProvider $provider): bool =>
-            $actor->name === 'merchant' && (int) $provider->owner_id === 1);
-        Gate::define('purchaseRetailLicense', static fn (User $actor, Model $purchaser): bool =>
-            $actor->name === 'customer' && (int) $purchaser->getKey() === 2);
-        Gate::define('viewPurchasedLicenseKeys', static fn (User $actor, \Nafiswatsiq\Subbase\Models\LicenseOrder $order): bool =>
-            $actor->name === 'merchant' && (int) $order->provider_id === (int) LicenseProvider::query()->value('id'));
-        Gate::define('redeemLicenseKey', static fn (User $actor, Model $billable): bool =>
-            $actor->name === 'customer' && (int) $billable->getKey() === 2);
-        Gate::define('recordLicenseResale', static fn (User $actor, LicenseProvider $provider): bool =>
-            $actor->name === 'merchant' && (int) $provider->owner_id === 1);
+        Gate::define('purchaseWholesaleLicenses', static fn (User $actor, LicenseProvider $provider): bool => $actor->name === 'merchant' && (int) $provider->owner_id === 1);
+        Gate::define('purchaseRetailLicense', static fn (User $actor, Model $purchaser): bool => $actor->name === 'customer' && (int) $purchaser->getKey() === 2);
+        Gate::define('viewPurchasedLicenseKeys', static fn (User $actor, LicenseOrder $order): bool => $actor->name === 'merchant' && (int) $order->provider_id === (int) LicenseProvider::query()->value('id'));
+        Gate::define('redeemLicenseKey', static fn (User $actor, Model $billable): bool => $actor->name === 'customer' && (int) $billable->getKey() === 2);
+        Gate::define('recordLicenseResale', static fn (User $actor, LicenseProvider $provider): bool => $actor->name === 'merchant' && (int) $provider->owner_id === 1);
 
         config(['app.key' => 'base64:'.base64_encode(str_repeat('z', 32))]);
     }
@@ -153,7 +149,7 @@ abstract class LicenseTestCase extends TestCase
     {
         $merchant = $this->actor('merchant');
         $org = LicenseTestOrganization::query()->findOrFail(1);
-        $service = app(\Nafiswatsiq\Subbase\Services\LicenseProviderService::class);
+        $service = app(LicenseProviderService::class);
         $provider = $service->apply($org, $merchant, 'Electronics Store');
 
         return $service->approve($provider, $this->actor('admin'));

@@ -18,11 +18,6 @@ jobs:
           tools: composer:v2
       - run: composer validate --no-check-publish --strict
       - run: composer update --no-interaction --prefer-dist
-      - name: Inspect licensing Pint formatting changes
-        run: |
-          vendor/bin/pint src/Services/LicenseRedemptionService.php tests/Licensing/LicenseRedemptionTest.php tests/Licensing/LicenseTestCase.php tests/Licensing/LicenseWholesaleTest.php
-          git diff -- src/Services/LicenseRedemptionService.php tests/Licensing/LicenseRedemptionTest.php tests/Licensing/LicenseTestCase.php tests/Licensing/LicenseWholesaleTest.php
-          git diff --quiet -- src/Services/LicenseRedemptionService.php tests/Licensing/LicenseRedemptionTest.php tests/Licensing/LicenseTestCase.php tests/Licensing/LicenseWholesaleTest.php
       - run: vendor/bin/phpunit
       # The upstream fork has pre-existing style drift. Format existing files in a separate PR.
       - run: vendor/bin/pint --test src/Support/SubbasePermission.php tests/TestCase.php tests/Authorization/SubbasePermissionTest.php src/Support/Money.php tests/Money/MoneyTest.php src/Support/SubbaseTenancy.php src/Contracts/TenantAccess.php tests/Tenancy/SubbaseTenancyTest.php tests/Money/PrecisionMigrationTest.php tests/Money/ExactPricingTest.php src/Services/SubscriptionAdministration.php tests/Subscriptions/SubscriptionAdministrationTest.php src/Models/LicenseProduct.php src/Models/LicenseOffer.php src/Models/LicenseProvider.php src/Models/LicenseOrder.php src/Models/LicenseKey.php src/Models/LicenseSale.php src/Services/LicenseProviderService.php src/Services/LicenseOrderService.php src/Services/LicenseFulfillmentService.php src/Services/LicenseInventoryService.php src/Services/LicenseRedemptionService.php src/Services/LicenseResaleService.php tests/Licensing/LicenseTestCase.php tests/Licensing/LicenseWholesaleTest.php tests/Licensing/LicenseRedemptionTest.php

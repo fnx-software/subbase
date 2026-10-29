@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Nafiswatsiq\Subbase\Tests\Licensing;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Services\LicenseFulfillmentService;
 use Nafiswatsiq\Subbase\Services\LicenseInventoryService;
 use Nafiswatsiq\Subbase\Services\LicenseOrderService;
+use Nafiswatsiq\Subbase\Services\LicenseProviderService;
 use Nafiswatsiq\Subbase\Services\LicenseRedemptionService;
 
 final class LicenseRedemptionTest extends LicenseTestCase
@@ -71,7 +71,7 @@ final class LicenseRedemptionTest extends LicenseTestCase
         app(LicenseFulfillmentService::class)->fulfillPaidOrder($order, 128);
         $keys = app(LicenseInventoryService::class)->reveal($order, $this->actor('merchant'));
 
-        app(\Nafiswatsiq\Subbase\Services\LicenseProviderService::class)->suspend($provider, $this->actor('admin'));
+        app(LicenseProviderService::class)->suspend($provider, $this->actor('admin'));
         $redeemed = app(LicenseRedemptionService::class)->redeem($keys[0], $this->organization(2), $this->actor('customer'));
 
         $this->assertSame('redeemed', $redeemed->status);
