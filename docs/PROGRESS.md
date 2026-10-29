@@ -1,36 +1,39 @@
-# Subbase fork — progress
+# FNX Subbase — verified development progress
 
-Date: 2026-10-29. Product target: one standalone billing package across all Laravel applications, with an optional companion Subbase Payment package.
+Updated: 2026-10-29. **Draft PR**: https://github.com/fnx-software/subbase/pull/2
 
-## Current milestone: Stage 0 / Stabilize
+## Architecture decision
 
-- [x] Identified `fnx-software/subbase` fork; original upstream `nafiswatsiq/subbase` (MIT).
-- [x] Created `feat/universal-billing-foundation` feature branch; no modifications to `main`.
-- [x] Implemented a fail-closed native Laravel Gate authorization helper with optional Spatie integration.
-- [x] Policy methods use the provided actor and accept generic `Authenticatable` contracts.
-- [x] PHPUnit/Testbench tests added for permission denial and explicit grant; PHP 8.4 Laravel 13 tests observed passing (5/5).
-- [x] [Green CI](https://github.com/fnx-software/subbase/actions/runs/40828540923): 5 PHPUnit tests / 5 assertions; Composer audit and scoped new-file Pint succeeded. This is **not** a full business-behavior or legacy-formatting audit.
-- [x] Documented independent Eloquent subscription owners and the no-Fenix-dependency decision.
-- [ ] Complete reusable tenant-aware resource scoping and signed API adapters.
-- [ ] Verified installation + upgrade in CRM and Zeno; do not change their installed packages yet.
-- [ ] Full exact-decimal money and currency-scale refactor; currently original Plan/Discount floats are a known problem.
-- [ ] Lifecycle/proration/usage/seat plans and end-to-end payment integration.
-- [ ] Stable Composer identity as `fnx-software/subbase` and coordinated upgrade of the companion package.
-- [ ] Full Pint baseline; 64 pre-existing style issues in upstream repo require a formatting-only PR.
-- [ ] Multi-version PHP/Laravel/Filament test matrix, release and production readiness.
+Subbase and its companion Subbase Payment are the **one owned subscription stack for ALL Laravel projects**, inside or outside Fenix. A separate central Fenix Accounts adapter is optional, NEVER part of the core dependency. Supports Eloquent billables such as User, School, Organization, Tenant. Does not replace application-specific Invoice/POS/School finance ledgers.
 
-## Integration principles
+## Implemented on feat/universal-billing-foundation
 
-1. Standalone app: `User` or any custom Eloquent model with `HasPlanSubscriptions`.
-2. Organization SaaS: use an authorized `Organization`/Tenant model; no user-as-tenant fallback.
-3. Fenix Apps: Fenix Accounts adapter is optional and lives outside package core.
-4. Payment plugin adds checkout; no paid entitlement until server-verified settlement.
-5. Do not merge a breaking authorization or financial migration change until consumer apps and update guides are tested.
+- [x] Composer package identity changed to `fnx-software/subbase` **on the feature branch**, PHP namespace remains `Nafiswatsiq\Subbase\` for existing source integrations.
+- [x] Laravel Gate denies unauthorized access even if Spatie Permission is not installed. Policies use explicit actor; unauthorized users cannot automatically manage plans.
+- [x] Optional tenant access resolver, fail-closed if enabled but unavailable, Filament Plan/Subscription/Discount query, record and route scoping.
+- [x] Immutable BCMath `Money` value object with zero/two/three/four decimal currency precision and valid percent calculations.
+- [x] Accurate `Plan::getPriceDecimalForCurrency()` / `PlanPriceHelper::resolveExactWithDiscounts()` for checkout alongside legacy display APIs.
+- [x] Canonical decimal string price storage, `decimal:4` model casts, and forward-only widening migration for plan/discount/pivot fields. Avoid destructive down migrations.
+- [x] Tested price migration and applied discounts in Laravel/Testbench, initially using SQLite.
+- [x] PHP 8.4/Filament 5/Laravel 13 compatible CI running Composer validate/update, PHPUnit, scoped Pint and Composer audit.
+- [x] [Last known green code run](https://github.com/fnx-software/subbase/actions/runs/40838411564): **19 tests / 38 assertions**; Composer rename itself requires latest CI confirmation.
+- [x] Product architecture, developer usage, staged upgrade and implementation backlog documented.
 
-## Continue next
+## Remaining before stable release
 
-Read `AGENTS.md`, `docs/PRODUCT-SPEC.md`, `docs/UNIVERSAL-BILLING.md`, `docs/SECURITY-MIGRATION.md` and this document. Add tests for each feature, link issues/PRs and update Changelog and this file with actual verification. Keep `main` unchanged until reviewed.
+- [ ] Prove compatibility with real CRM and Zeno subscription data/migrations on PostgreSQL; keep their installed production package untouched.
+- [ ] Full multi-tenancy isolation across relationship managers, actions, jobs, APIs and background processes; host must implement tenant-aware access.
+- [ ] Finish scheduled recurring billing, trial/renewal/upgrade/downgrade, cancellation, grace, seat and usage quota enforcement with concurrency tests.
+- [ ] Add optional headless core / Filament-independent package mode (Filament is currently in Composer `require`).
+- [ ] Full UI/multi-language/RTL review, pricing and tax rule certification as applicable.
+- [ ] Multi-DB matrix, backups and migration rollback, full legacy Pint cleanup (upstream baseline 64 violations), production/performance tests.
+- [ ] Merge PR, align default-branch Composer identity, tag release and validate Packagist distribution.
+- [ ] Real payment provider lifecycle; that work belongs to the companion package.
 
-## Review
+## Distribution warning
 
-- [Draft pull request #2](https://github.com/fnx-software/subbase/pull/2) — branch remains separate from `main` pending consumer integration, full financial verification and release preparation.
+The current `main` branch still uses `nafiswatsiq/subbase` as the Composer package identity. **Do not assume `composer require fnx-software/subbase` resolves publicly yet.** A safe feature-branch evaluation uses a *path* repository as documented in `docs/INSTALLATION.md`, and never an existing production app.
+
+## Continuation
+
+Read `AGENTS.md`, `docs/PRODUCT-SPEC.md`, `docs/INSTALLATION.md`, `docs/PROGRESS.md`, `docs/BACKLOG.md` and `docs/PRECISION-MIGRATION.md`. Keep PR Draft until financial and tenant gates pass. Update `Changelog.md` for every substantive change.
