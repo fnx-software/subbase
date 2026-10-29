@@ -22,6 +22,10 @@ return [
 
     'default_currency' => 'USD',
 
+    // ISO 4217 minor unit scales; overrides for special pricing/accounting cases.
+    // Monetary posting requires canonical decimal strings, not PHP floats.
+    'currency_scales' => [],
+
     'theme' => env('SUBBASE_THEME', 'default'),
 
     'locale_currency_map' => [
