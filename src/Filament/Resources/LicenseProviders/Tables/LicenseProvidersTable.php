@@ -17,13 +17,13 @@ final class LicenseProvidersTable
     public static function configure(Table $table): Table
     {
         return $table->columns([
-                TextColumn::make('business_name')->searchable(),
-                TextColumn::make('owner_type')->label('Owner type'),
-                TextColumn::make('owner_id')->label('Owner ID'),
-                TextColumn::make('status')->badge(),
-                TextColumn::make('approved_at')->dateTime(),
-                TextColumn::make('created_at')->dateTime(),
-            ])
+            TextColumn::make('business_name')->searchable(),
+            TextColumn::make('owner_type')->label('Owner type'),
+            TextColumn::make('owner_id')->label('Owner ID'),
+            TextColumn::make('status')->badge(),
+            TextColumn::make('approved_at')->dateTime(),
+            TextColumn::make('created_at')->dateTime(),
+        ])
             ->filters([
                 SelectFilter::make('status')->options([
                     'pending' => 'Pending',

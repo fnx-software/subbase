@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseKeys;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -14,9 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseKeys\Pages\ListLicenseKeys;
 use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
-use Nafiswatsiq\Subbase\Filament\Resources\LicenseKeys\Pages\ListLicenseKeys;
+use UnitEnum;
 
 class LicenseKeyResource extends Resource
 {
@@ -59,13 +59,13 @@ class LicenseKeyResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-                TextColumn::make('id')->label('License ID'),
-                TextColumn::make('code_tail')->label('Last 8 characters'),
-                TextColumn::make('order.public_id')->label('Order'),
-                TextColumn::make('provider.business_name')->label('Provider'),
-                TextColumn::make('status')->badge(),
-                TextColumn::make('redeemed_at')->dateTime(),
-            ])->defaultSort('created_at', 'desc');
+            TextColumn::make('id')->label('License ID'),
+            TextColumn::make('code_tail')->label('Last 8 characters'),
+            TextColumn::make('order.public_id')->label('Order'),
+            TextColumn::make('provider.business_name')->label('Provider'),
+            TextColumn::make('status')->badge(),
+            TextColumn::make('redeemed_at')->dateTime(),
+        ])->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array

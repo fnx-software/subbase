@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseProviders;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -13,10 +12,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Nafiswatsiq\Subbase\Models\LicenseProvider;
-use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProviders\Pages\ListLicenseProviders;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProviders\Tables\LicenseProvidersTable;
+use Nafiswatsiq\Subbase\Models\LicenseProvider;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
+use UnitEnum;
 
 class LicenseProviderResource extends Resource
 {

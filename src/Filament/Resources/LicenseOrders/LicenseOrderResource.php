@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseOrders;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -14,9 +13,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseOrders\Pages\ListLicenseOrders;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
-use Nafiswatsiq\Subbase\Filament\Resources\LicenseOrders\Pages\ListLicenseOrders;
+use UnitEnum;
 
 class LicenseOrderResource extends Resource
 {
@@ -59,17 +59,17 @@ class LicenseOrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table->columns([
-                TextColumn::make('public_id')->label('Order')->searchable(),
-                TextColumn::make('channel')->badge(),
-                TextColumn::make('provider.business_name')->label('Reseller'),
-                TextColumn::make('offer.sku')->label('License offer'),
-                TextColumn::make('quantity'),
-                TextColumn::make('currency'),
-                TextColumn::make('unit_price'),
-                TextColumn::make('total_amount'),
-                TextColumn::make('status')->badge(),
-                TextColumn::make('fulfilled_at')->dateTime(),
-            ])->defaultSort('created_at', 'desc');
+            TextColumn::make('public_id')->label('Order')->searchable(),
+            TextColumn::make('channel')->badge(),
+            TextColumn::make('provider.business_name')->label('Reseller'),
+            TextColumn::make('offer.sku')->label('License offer'),
+            TextColumn::make('quantity'),
+            TextColumn::make('currency'),
+            TextColumn::make('unit_price'),
+            TextColumn::make('total_amount'),
+            TextColumn::make('status')->badge(),
+            TextColumn::make('fulfilled_at')->dateTime(),
+        ])->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array

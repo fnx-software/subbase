@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -14,13 +13,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Nafiswatsiq\Subbase\Models\LicenseProduct;
-use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\Pages\CreateLicenseProduct;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\Pages\EditLicenseProduct;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\Pages\ListLicenseProducts;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\Schemas\LicenseProductForm;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\Tables\LicenseProductsTable;
+use Nafiswatsiq\Subbase\Models\LicenseProduct;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
+use UnitEnum;
 
 class LicenseProductResource extends Resource
 {

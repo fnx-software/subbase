@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers;
 
 use BackedEnum;
-use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -14,13 +13,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Nafiswatsiq\Subbase\Models\LicenseOffer;
-use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\Pages\CreateLicenseOffer;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\Pages\EditLicenseOffer;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\Pages\ListLicenseOffers;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\Schemas\LicenseOfferForm;
 use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\Tables\LicenseOffersTable;
+use Nafiswatsiq\Subbase\Models\LicenseOffer;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
+use UnitEnum;
 
 class LicenseOfferResource extends Resource
 {

@@ -14,10 +14,10 @@ final class LicenseProductsTable
     public static function configure(Table $table): Table
     {
         return $table->columns([
-                TextColumn::make('sku')->searchable(),
-                TextColumn::make('name')->searchable(),
-                IconColumn::make('is_active')->boolean(),
-            ])
+            TextColumn::make('sku')->searchable(),
+            TextColumn::make('name')->searchable(),
+            IconColumn::make('is_active')->boolean(),
+        ])
             ->recordActions([EditAction::make()])
             ->defaultSort('id', 'desc');
     }
