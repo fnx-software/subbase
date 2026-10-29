@@ -48,6 +48,7 @@ class SubbaseServiceProvider extends PackageServiceProvider
                             'add_prices_to_plans_table.php',
                             'add_featured_to_plans_table.php',
                             'create_discounts_table.php',
+                            'upgrade_billing_decimal_columns.php',
                         ];
 
                         foreach ($migrations as $migration) {
