@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Models\Plan;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use RuntimeException;
 
 final class LicenseRedemptionService
@@ -29,7 +30,9 @@ final class LicenseRedemptionService
             throw new InvalidArgumentException('Activation requires a saved, subscribable account.');
         }
 
-        if (! Gate::forUser($actor)->allows('redeemLicenseKey', $billable)) {
+        if (! SubbaseTenancy::allows($billable, 'redeemLicenseKey', $actor)
+            || ! Gate::forUser($actor)->allows('redeemLicenseKey', $billable)
+        ) {
             throw new AuthorizationException('Cannot activate a license for this account.');
         }
 

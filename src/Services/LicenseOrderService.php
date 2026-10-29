@@ -15,6 +15,7 @@ use Nafiswatsiq\Subbase\Models\LicenseOffer;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Models\LicenseProvider;
 use Nafiswatsiq\Subbase\Support\Money;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use RuntimeException;
 
 final class LicenseOrderService
@@ -39,6 +40,10 @@ final class LicenseOrderService
             throw new InvalidArgumentException('Invalid idempotency token.');
         }
 
+        if (! SubbaseTenancy::allows($purchaser, 'purchaseLicense', $actor)) {
+            throw new AuthorizationException('Purchaser is not allowed in this tenant.');
+        }
+
         $isWholesale = $provider !== null;
         $max = (int) config('subbase.licensing.max_order_quantity', 500);
         if ($quantity < 1 || $quantity > $max) {
@@ -46,7 +51,8 @@ final class LicenseOrderService
         }
 
         if ($isWholesale) {
-            if (! $provider->exists || ! $provider->approved()
+            if (! SubbaseTenancy::allows($provider, 'purchaseWholesaleLicenses', $actor)
+                || ! $provider->exists || ! $provider->approved()
                 || $purchaser->getMorphClass() !== $provider->owner_type
                 || (string) $purchaser->getKey() !== (string) $provider->owner_id
                 || $quantity < (int) $offer->wholesale_minimum

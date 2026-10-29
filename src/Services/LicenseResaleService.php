@@ -13,6 +13,7 @@ use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Models\LicenseProvider;
 use Nafiswatsiq\Subbase\Models\LicenseSale;
 use Nafiswatsiq\Subbase\Support\Money;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use RuntimeException;
 
 final class LicenseResaleService
@@ -31,7 +32,9 @@ final class LicenseResaleService
         string $salePrice,
         ?string $externalReference = null,
     ): array {
-        if (! Gate::forUser($actor)->allows('recordLicenseResale', $provider)) {
+        if (! SubbaseTenancy::allows($provider, 'recordLicenseResale', $actor)
+            || ! Gate::forUser($actor)->allows('recordLicenseResale', $provider)
+        ) {
             throw new AuthorizationException('Not authorized to record this reseller sale.');
         }
 

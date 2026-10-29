@@ -11,6 +11,7 @@ use Nafiswatsiq\Subbase\Models\LicenseKey;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
 use Nafiswatsiq\Subbase\Models\LicenseProvider;
 use Nafiswatsiq\Subbase\Models\LicenseSale;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 
 final class LicenseProviderDashboard
 {
@@ -19,7 +20,9 @@ final class LicenseProviderDashboard
      */
     public function summary(LicenseProvider $provider, Authenticatable $actor): array
     {
-        if (! Gate::forUser($actor)->allows('viewLicenseProviderDashboard', $provider)) {
+        if (! SubbaseTenancy::allows($provider, 'view', $actor)
+            || ! Gate::forUser($actor)->allows('viewLicenseProviderDashboard', $provider)
+        ) {
             throw new AuthorizationException('Cannot view this reseller account.');
         }
 

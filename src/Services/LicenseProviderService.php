@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use InvalidArgumentException;
 use Nafiswatsiq\Subbase\Models\LicenseProvider;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use RuntimeException;
 
 final class LicenseProviderService
@@ -25,7 +26,9 @@ final class LicenseProviderService
             throw new InvalidArgumentException('Provider owner and business name are required.');
         }
 
-        if (! Gate::forUser($actor)->allows('applyForLicenseProvider', $owner)) {
+        if (! SubbaseTenancy::allows($owner, 'applyForLicenseProvider', $actor)
+            || ! Gate::forUser($actor)->allows('applyForLicenseProvider', $owner)
+        ) {
             throw new AuthorizationException('Cannot submit a reseller application.');
         }
 
@@ -50,7 +53,9 @@ final class LicenseProviderService
 
     private function transition(LicenseProvider $provider, Authenticatable $admin, string $status): LicenseProvider
     {
-        if (! Gate::forUser($admin)->allows('manageLicenseProviders', $provider)) {
+        if (! SubbaseTenancy::allows($provider, 'update', $admin)
+            || ! Gate::forUser($admin)->allows('manageLicenseProviders', $provider)
+        ) {
             throw new AuthorizationException('Only an authorized billing administrator may approve resellers.');
         }
 

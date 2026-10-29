@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Gate;
 use Nafiswatsiq\Subbase\Models\LicenseOrder;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use RuntimeException;
 
 final class LicenseInventoryService
@@ -23,7 +24,9 @@ final class LicenseInventoryService
     {
         $order = LicenseOrder::query()->findOrFail($order->getKey());
 
-        if (! Gate::forUser($actor)->allows('viewPurchasedLicenseKeys', $order)) {
+        if (! SubbaseTenancy::allows($order, 'viewLicenseKeys', $actor)
+            || ! Gate::forUser($actor)->allows('viewPurchasedLicenseKeys', $order)
+        ) {
             throw new AuthorizationException('License inventory is private.');
         }
 
