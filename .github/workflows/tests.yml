@@ -20,5 +20,5 @@ jobs:
       - run: composer update --no-interaction --prefer-dist
       - run: vendor/bin/phpunit
       # The upstream fork has pre-existing style drift. Format existing files in a separate PR.
-      - run: vendor/bin/pint --test src/Support/SubbasePermission.php tests/TestCase.php tests/Authorization/SubbasePermissionTest.php src/Support/Money.php tests/Money/MoneyTest.php src/Support/SubbaseTenancy.php src/Contracts/TenantAccess.php tests/Tenancy/SubbaseTenancyTest.php tests/Money/PrecisionMigrationTest.php tests/Money/ExactPricingTest.php
+      - run: vendor/bin/pint --test src/Support/SubbasePermission.php tests/TestCase.php tests/Authorization/SubbasePermissionTest.php src/Support/Money.php tests/Money/MoneyTest.php src/Support/SubbaseTenancy.php src/Contracts/TenantAccess.php tests/Tenancy/SubbaseTenancyTest.php tests/Money/PrecisionMigrationTest.php tests/Money/ExactPricingTest.php src/Services/SubscriptionAdministration.php tests/Subscriptions/SubscriptionAdministrationTest.php
       - run: composer audit --no-dev
