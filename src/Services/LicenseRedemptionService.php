@@ -53,16 +53,20 @@ final class LicenseRedemptionService
                 throw new RuntimeException('This license has not been paid for.');
             }
 
-            $offer = $key->offer()->firstOrFail();
-            $product = $offer->product()->firstOrFail();
-            if (! preg_match('/^[a-z0-9][a-z0-9-]{0,65}$/D', (string) $product->sku)) {
-                throw new RuntimeException('License product SKU is invalid.');
+            // Offer prices, plan associations, and term lengths may change
+            // AFTER a key is sold. Honor the frozen contract in its paid order.
+            $sku = (string) $order->contract_product_sku;
+            if (! preg_match('/^[a-z0-9][a-z0-9-]{0,65}$/D', $sku)
+                || ! in_array($order->contract_term_unit, ['day', 'month', 'year'], true)
+                || (int) $order->contract_term_count < 1
+            ) {
+                throw new RuntimeException('This license lacks a valid frozen purchase contract.');
             }
 
             $planClass = config('subbase.models.plan', Plan::class);
-            $plan = $planClass::query()->findOrFail($offer->plan_id);
+            $plan = $planClass::query()->findOrFail($order->contract_plan_id);
 
-            $subscriptionName = 'license-'.$product->sku;
+            $subscriptionName = 'license-'.$sku;
             $subscription = $billable->planSubscriptions()
                 ->where('slug', $subscriptionName)
                 ->lockForUpdate()
@@ -77,10 +81,10 @@ final class LicenseRedemptionService
                 $start = $subscription->ends_at->copy();
             }
 
-            $end = match ($offer->term_unit) {
-                'day' => $start->copy()->addDays((int) $offer->term_count),
-                'month' => $start->copy()->addMonthsNoOverflow((int) $offer->term_count),
-                'year' => $start->copy()->addYearsNoOverflow((int) $offer->term_count),
+            $end = match ($order->contract_term_unit) {
+                'day' => $start->copy()->addDays((int) $order->contract_term_count),
+                'month' => $start->copy()->addMonthsNoOverflow((int) $order->contract_term_count),
+                'year' => $start->copy()->addYearsNoOverflow((int) $order->contract_term_count),
                 default => throw new RuntimeException('Unsupported license term.'),
             };
 

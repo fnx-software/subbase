@@ -86,6 +86,7 @@ abstract class LicenseTestCase extends TestCase
         foreach ([
             'create_license_catalog_and_providers_table',
             'create_license_orders_and_keys_table',
+            'add_license_order_contract_snapshots_table',
         ] as $name) {
             $migration = require dirname(__DIR__, 2).'/database/migrations/'.$name.'.php';
             $migration->up();

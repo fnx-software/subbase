@@ -15,12 +15,14 @@ class LicenseOrder extends Model
         'public_id', 'offer_id', 'provider_id', 'purchaser_type', 'purchaser_id',
         'channel', 'quantity', 'currency', 'retail_reference_price', 'unit_price',
         'total_amount', 'status', 'idempotency_key', 'payment_id', 'fulfilled_at',
+        'contract_plan_id', 'contract_product_sku', 'contract_term_count', 'contract_term_unit',
     ];
 
     protected function casts(): array
     {
         return [
             'quantity' => 'integer',
+            'contract_term_count' => 'integer',
             'unit_price' => 'decimal:4',
             'retail_reference_price' => 'decimal:4',
             'total_amount' => 'decimal:4',
