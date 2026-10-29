@@ -3,6 +3,7 @@
 namespace Nafiswatsiq\Subbase\Helpers;
 
 use Nafiswatsiq\Subbase\Models\Plan;
+use Nafiswatsiq\Subbase\Support\Money;
 
 class PlanPriceHelper
 {
@@ -60,6 +61,66 @@ class PlanPriceHelper
             'final_amount' => $finalAmount,
             'currency' => $resolvedCurrency,
             'best_discount' => $bestDiscount,
+        ];
+    }
+
+    /**
+     * Canonical quote for financial settlement; all amounts are decimal strings.
+     * Existing float-returning methods remain as presentation compatibility APIs.
+     *
+     * @return array{original_amount:string,discount_amount:string,final_amount:string,currency:string,best_discount:mixed}
+     */
+    public static function resolveExactWithDiscounts(Plan $plan, ?string $currency = null): array
+    {
+        $code = static::currency($plan, $currency);
+        $original = new Money($plan->getPriceDecimalForCurrency($code), $code);
+        $final = $original;
+        $selected = null;
+
+        foreach ($plan->activeDiscounts()->get() as $discount) {
+            if (! $discount->isValid()) {
+                continue;
+            }
+
+            $discountCurrency = strtoupper((string) ($discount->currency ?? ''));
+            if ($discountCurrency !== '' && $discountCurrency !== $code) {
+                continue;
+            }
+
+            $min = $discount->getRawOriginal('min_amount');
+            if ($min !== null && $min !== '' && bccomp($original->amount(), (new Money((string) $min, $code))->amount(), $original->scale()) < 0) {
+                continue;
+            }
+
+            $value = (string) ($discount->getRawOriginal('value') ?? '0');
+            if ($discount->type === 'percentage') {
+                $deduction = $original->percent($value);
+            } elseif ($discount->type === 'fixed') {
+                $deduction = new Money($value, $code);
+            } else {
+                continue;
+            }
+
+            if (bccomp($deduction->amount(), $original->amount(), $original->scale()) > 0) {
+                $deduction = $original;
+            }
+
+            if ($deduction->isZero()) {
+                continue;
+            }
+
+            $final = $original->minus($deduction);
+            $selected = $discount;
+
+            break;
+        }
+
+        return [
+            'original_amount' => $original->amount(),
+            'discount_amount' => $original->minus($final)->amount(),
+            'final_amount' => $final->amount(),
+            'currency' => $code,
+            'best_discount' => $selected,
         ];
     }
 

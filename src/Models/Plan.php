@@ -37,8 +37,8 @@ class Plan extends BasePlan
     protected $casts = [
         'is_active' => 'boolean',
         'featured' => 'boolean',
-        'price' => 'float',
-        'signup_fee' => 'float',
+        'price' => 'decimal:4',
+        'signup_fee' => 'decimal:4',
         'prices' => 'array',
         'deleted_at' => 'datetime',
     ];
@@ -65,6 +65,32 @@ class Plan extends BasePlan
         }
 
         return (float) ($this->price ?? 0.0);
+    }
+
+    /**
+     * Exact financial accessor: no binary float conversion. Existing float API
+     * remains for legacy presentation calls, not financial posting.
+     */
+    public function getPriceDecimalForCurrency(?string $currency = null, bool $fallbackToBase = true): string
+    {
+        $target = strtoupper((string) ($currency ?: $this->currency));
+        $raw = $this->getRawOriginal('prices');
+        $prices = is_string($raw) ? json_decode($raw, true) : $raw;
+        if (! is_array($prices)) {
+            $prices = [];
+        }
+
+        if (array_key_exists($target, $prices) && is_numeric($prices[$target])) {
+            return (new \Nafiswatsiq\Subbase\Support\Money((string) $prices[$target], $target))->amount();
+        }
+
+        if (! $fallbackToBase) {
+            return \Nafiswatsiq\Subbase\Support\Money::zero($target)->amount();
+        }
+
+        $base = $this->getRawOriginal('price') ?? '0';
+
+        return (new \Nafiswatsiq\Subbase\Support\Money((string) $base, $target))->amount();
     }
 
     public function getPriceForLocale(?string $locale = null, bool $fallbackToBase = true): float
@@ -134,7 +160,7 @@ class Plan extends BasePlan
     {
         $targetCurrency = strtoupper($currency);
         $prices = $this->normalizedPrices();
-        $prices[$targetCurrency] = (float) $price;
+        $prices[$targetCurrency] = (new \Nafiswatsiq\Subbase\Support\Money((string) $price, $targetCurrency))->amount();
 
         $this->prices = $prices;
         $this->syncBasePriceFromCurrency();
@@ -151,7 +177,7 @@ class Plan extends BasePlan
             $firstCurrency = array_key_first($prices);
 
             if ($firstCurrency === null) {
-                $this->price = 0.0;
+                $this->price = '0';
 
                 return $this;
             }
@@ -160,7 +186,7 @@ class Plan extends BasePlan
             $this->currency = $targetCurrency;
         }
 
-        $this->price = (float) $prices[$targetCurrency];
+        $this->price = $prices[$targetCurrency];
 
         return $this;
     }
@@ -177,7 +203,7 @@ class Plan extends BasePlan
         $targetCurrency = strtoupper((string) ($this->attributes['currency'] ?? $this->currency ?? ''));
 
         if ($targetCurrency !== '' && array_key_exists($targetCurrency, $normalized)) {
-            $this->attributes['price'] = (float) $normalized[$targetCurrency];
+            $this->attributes['price'] = $normalized[$targetCurrency];
 
             return;
         }
@@ -189,7 +215,7 @@ class Plan extends BasePlan
         }
 
         $this->attributes['currency'] = $firstCurrency;
-        $this->attributes['price'] = (float) $normalized[$firstCurrency];
+        $this->attributes['price'] = $normalized[$firstCurrency];
     }
 
     protected static function booted(): void
@@ -197,7 +223,7 @@ class Plan extends BasePlan
         static::saving(function (self $plan): void {
             if (empty($plan->prices) && ! empty($plan->currency)) {
                 $plan->prices = [
-                    strtoupper((string) $plan->currency) => (float) $plan->price,
+                    strtoupper((string) $plan->currency) => (string) $plan->price,
                 ];
 
                 return;
@@ -264,7 +290,7 @@ class Plan extends BasePlan
                 continue;
             }
 
-            $normalized[$currencyCode] = (float) $amount;
+            $normalized[$currencyCode] = (new \Nafiswatsiq\Subbase\Support\Money((string) $amount, $currencyCode))->amount();
         }
 
         ksort($normalized);
@@ -370,7 +396,7 @@ class Plan extends BasePlan
                 continue;
             }
 
-            $merged[$currencyCode] = (float) $rawPrice;
+            $merged[$currencyCode] = (new \Nafiswatsiq\Subbase\Support\Money((string) $rawPrice, $currencyCode))->amount();
         }
 
         ksort($merged);

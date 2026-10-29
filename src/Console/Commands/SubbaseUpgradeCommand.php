@@ -84,6 +84,10 @@ class SubbaseUpgradeCommand extends Command
             'add_prices_to_plans_table.php',
             'add_featured_to_plans_table.php',
             'create_discounts_table.php',
+            'upgrade_billing_decimal_columns.php',
+            'create_license_catalog_and_providers_table.php',
+            'create_license_orders_and_keys_table.php',
+            'add_license_order_contract_snapshots_table.php',
         ];
 
         $published = 0;

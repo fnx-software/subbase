@@ -1,0 +1,29 @@
+name: Package Tests
+on:
+  push:
+    branches: [main, 'feat/**', 'fix/**']
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, dom, sqlite3, pdo_sqlite, bcmath
+          coverage: none
+          tools: composer:v2
+      - run: composer validate --no-check-publish --strict
+      - run: composer update --no-interaction --prefer-dist
+      - name: Syntax check all licensing admin resources
+        run: |
+          find src/Filament/Resources/LicenseProducts src/Filament/Resources/LicenseOffers src/Filament/Resources/LicenseProviders src/Filament/Resources/LicenseOrders src/Filament/Resources/LicenseKeys -name '*.php' -exec php -l {} \;
+      - run: vendor/bin/phpunit
+      # The upstream fork has pre-existing style drift. Format existing files in a separate PR.
+      - run: vendor/bin/pint --test src/Support/SubbasePermission.php tests/TestCase.php tests/Authorization/SubbasePermissionTest.php src/Support/Money.php tests/Money/MoneyTest.php src/Support/SubbaseTenancy.php src/Contracts/TenantAccess.php tests/Tenancy/SubbaseTenancyTest.php tests/Money/PrecisionMigrationTest.php tests/Money/ExactPricingTest.php src/Services/SubscriptionAdministration.php tests/Subscriptions/SubscriptionAdministrationTest.php src/Models/LicenseProduct.php src/Models/LicenseOffer.php src/Models/LicenseProvider.php src/Models/LicenseOrder.php src/Models/LicenseKey.php src/Models/LicenseSale.php src/Services/LicenseProviderService.php src/Services/LicenseOrderService.php src/Services/LicenseFulfillmentService.php src/Services/LicenseInventoryService.php src/Services/LicenseRedemptionService.php src/Services/LicenseResaleService.php src/Services/LicenseProviderDashboard.php tests/Licensing/LicenseTestCase.php tests/Licensing/LicenseWholesaleTest.php tests/Licensing/LicenseRedemptionTest.php tests/Licensing/LicenseAdminResourcesTest.php
+      - name: Pint licensing Filament 5 resources
+        run: vendor/bin/pint --test src/Filament/Resources/LicenseProducts src/Filament/Resources/LicenseOffers src/Filament/Resources/LicenseProviders src/Filament/Resources/LicenseOrders src/Filament/Resources/LicenseKeys
+      - run: composer audit --no-dev

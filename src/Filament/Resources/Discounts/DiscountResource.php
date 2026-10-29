@@ -11,6 +11,7 @@ use Nafiswatsiq\Subbase\Filament\Resources\Discounts\Schemas\DiscountForm;
 use Nafiswatsiq\Subbase\Filament\Resources\Discounts\Tables\DiscountsTable;
 use Nafiswatsiq\Subbase\Models\Discount;
 use Nafiswatsiq\Subbase\Support\SubbasePermission;
+use Nafiswatsiq\Subbase\Support\SubbaseTenancy;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -45,12 +46,12 @@ class DiscountResource extends Resource
 
     public static function canEdit(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'update', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'update', static::getModel(), null, $record);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'delete', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'delete', static::getModel(), null, $record);
     }
 
     public static function canDeleteAny(): bool
@@ -60,7 +61,7 @@ class DiscountResource extends Resource
 
     public static function canForceDelete(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'forceDelete', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'forceDelete', static::getModel(), null, $record);
     }
 
     public static function canForceDeleteAny(): bool
@@ -70,7 +71,7 @@ class DiscountResource extends Resource
 
     public static function canRestore(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'restore', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'restore', static::getModel(), null, $record);
     }
 
     public static function canRestoreAny(): bool
@@ -80,12 +81,12 @@ class DiscountResource extends Resource
 
     public static function canReplicate(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'replicate', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'replicate', static::getModel(), null, $record);
     }
 
     public static function canView(Model $record): bool
     {
-        return SubbasePermission::allows(config('subbase.permissions.discount'), 'view', static::getModel());
+        return SubbasePermission::allows(config('subbase.permissions.discount'), 'view', static::getModel(), null, $record);
     }
 
     public static function getNavigationLabel(): string
@@ -105,7 +106,7 @@ class DiscountResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getModel()::count();
+        return (string) static::getEloquentQuery()->count();
     }
 
     public static function table(Table $table): Table
@@ -127,11 +128,17 @@ class DiscountResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return SubbaseTenancy::scope(parent::getEloquentQuery());
+    }
+
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
-        return parent::getRecordRouteBindingEloquentQuery()
-            ->withoutGlobalScopes([
+        return SubbaseTenancy::scope(
+            parent::getRecordRouteBindingEloquentQuery()->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
+            ]),
+        );
     }
 }

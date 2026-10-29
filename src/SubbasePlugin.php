@@ -7,6 +7,11 @@ use Filament\Panel;
 use Nafiswatsiq\Subbase\Filament\Resources\Plans\PlanResource;
 use Nafiswatsiq\Subbase\Filament\Resources\Subscriptions\SubscriptionResource;
 use Nafiswatsiq\Subbase\Filament\Resources\Discounts\DiscountResource;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseProducts\LicenseProductResource;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseOffers\LicenseOfferResource;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseProviders\LicenseProviderResource;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseOrders\LicenseOrderResource;
+use Nafiswatsiq\Subbase\Filament\Resources\LicenseKeys\LicenseKeyResource;
 
 class SubbasePlugin implements Plugin
 {
@@ -21,6 +26,11 @@ class SubbasePlugin implements Plugin
             PlanResource::class,
             SubscriptionResource::class,
             DiscountResource::class,
+            LicenseProductResource::class,
+            LicenseOfferResource::class,
+            LicenseProviderResource::class,
+            LicenseOrderResource::class,
+            LicenseKeyResource::class,
         ]);
     }
 

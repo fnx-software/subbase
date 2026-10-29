@@ -1,3 +1,5 @@
+> **FNX Software Subbase fork:** One reusable subscriptions engine for standalone and multi-tenant Laravel projects. Feature-branch Composer name: `fnx-software/subbase` (default branch not migrated); PHP namespace stays `Nafiswatsiq\\Subbase`. The [implementation guide](docs/INSTALLATION.md), [progress tracker](docs/PROGRESS.md), and [draft PR #2](https://github.com/fnx-software/subbase/pull/2) document the status. **Do not install in production yet.**
+
 <img src="./.github/resources/banner-subbase.jpg" alt="header" class="filament-hidden" />
 
 # Subbase - Filament Subscription Management Plugin
@@ -369,3 +371,8 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 - Built with [Filament](https://filamentphp.com)
 - Powered by [laravelcm/laravel-subscriptions](https://github.com/laravelcm/laravel-subscriptions)
 - Internationalization by [Spatie Laravel Translatable](https://github.com/spatie/laravel-translatable)
+
+
+### License keys and reseller/provider channel
+
+The FNX feature branch now contains [License Key & Provider documentation](docs/LICENSING-RESELLERS.md): sell app-specific plans with separate retail and wholesale prices, approve a business reseller, issue encrypted single-use keys only after cleared payment, and allow independent resale with gross-margin reporting. A customer activates their plan when a key is redeemed, not when the reseller bought it. See [development progress](docs/PROGRESS.md). **This is not a production-ready payment release.**

@@ -1,32 +1,58 @@
 {
-  "name": "nafiswatsiq/subbase",
-  "description": "Filament plugin for advanced subscriptions",
-  "type": "library",
-  "license": "MIT",
-  "keywords": ["filament", "subscription", "laravel", "saas", "billing", "multi-currency"],
-  "homepage": "https://github.com/nafiswatsiq/subbase",
-  "authors": [
-    {
-      "name": "Nafis Watsiq",
-      "email": "nafiswatsiq@gmail.com"
+    "name": "fnx-software/subbase",
+    "description": "FNX Software universal subscription management for Laravel and Filament",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "filament",
+        "subscription",
+        "laravel",
+        "saas",
+        "billing",
+        "multi-currency"
+    ],
+    "homepage": "https://github.com/fnx-software/subbase",
+    "authors": [
+        {
+            "name": "Nafis Watsiq",
+            "email": "nafiswatsiq@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^5.0",
+        "laravelcm/laravel-subscriptions": "^1.8",
+        "spatie/laravel-package-tools": "^1.16",
+        "ext-bcmath": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Nafiswatsiq\\Subbase\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Nafiswatsiq\\Subbase\\SubbaseServiceProvider"
+            ]
+        }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^11.3",
+        "phpunit/phpunit": "^12.5",
+        "laravel/pint": "^1.27"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Nafiswatsiq\\Subbase\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "pint --test"
+    },
+    "support": {
+        "source": "https://github.com/fnx-software/subbase",
+        "issues": "https://github.com/fnx-software/subbase/pulls"
     }
-  ],
-  "require": {
-      "php": "^8.2",
-      "filament/filament": "^5.0",
-      "laravelcm/laravel-subscriptions": "^1.8",
-      "spatie/laravel-package-tools": "^1.16"
-  },
-  "autoload": {
-      "psr-4": {
-          "Nafiswatsiq\\Subbase\\": "src/"
-      }
-  },
-  "extra": {
-      "laravel": {
-          "providers": [
-              "Nafiswatsiq\\Subbase\\SubbaseServiceProvider"
-          ]
-      }
-  }
 }
