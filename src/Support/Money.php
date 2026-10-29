@@ -27,7 +27,7 @@ final readonly class Money
             throw new InvalidArgumentException('Currency must be a three-letter ISO 4217 code.');
         }
 
-        if (! preg_match('/^(?:0|[1-9][0-9]{0,15})(?:\.[0-9]{1,12})?$/D', trim($amount))) {
+        if (! preg_match('/^(?:0|[1-9][0-9]{0,15})(?:\.[0-9]{1,18})?$/D', trim($amount))) {
             throw new InvalidArgumentException('Money must be a nonnegative plain decimal string.');
         }
 
