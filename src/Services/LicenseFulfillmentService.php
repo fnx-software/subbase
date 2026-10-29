@@ -35,7 +35,7 @@ final class LicenseFulfillmentService
                 return $locked;
             }
 
-            if ($locked->status !== 'pending' || $locked->keys()->exists()) {
+            if (! in_array($locked->status, ['pending', 'awaiting_payment'], true) || $locked->keys()->exists()) {
                 throw new RuntimeException('Order cannot be fulfilled in its current state.');
             }
 
